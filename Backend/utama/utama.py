@@ -16,15 +16,7 @@ def get_utama_data():
     try:
         import mysql.connector
         
-        conn = mysql.connector.connect(
-            host=Config.DB_HOST,
-            port=Config.DB_PORT,
-            user=Config.DB_USER,
-            password=Config.DB_PASSWORD,
-            database=Config.DB_NAME,
-            ssl_verify_cert=False,
-            ssl_ca=None
-        )
+        conn = mysql.connector.connect(**Config.MYSQL_CONFIG)
         cursor = conn.cursor(dictionary=True)
         
         # 1. Ambil Data Profil Utama

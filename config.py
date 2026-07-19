@@ -10,6 +10,7 @@ class Config:
     DB_USER = os.getenv('DB_USER', '2gi9aLVn8E3YWe3.root')
     DB_PASSWORD = os.getenv('DB_PASSWORD', 'MMaGmIMjVg3D1es5')
     DB_NAME = os.getenv('DB_NAME', 'Portofolio')
+    DB_CA_PATH = os.getenv('DB_CA_PATH', '')
     
     MYSQL_CONFIG = {
         'host': DB_HOST,
@@ -17,8 +18,8 @@ class Config:
         'user': DB_USER,
         'password': DB_PASSWORD,
         'database': DB_NAME,
-        'ssl_verify_cert': False,
-        'ssl_ca': None
+        'ssl_verify_cert': True if DB_CA_PATH else False,
+        'ssl_ca': DB_CA_PATH if DB_CA_PATH else None
     }
     
     # Flask Configuration
