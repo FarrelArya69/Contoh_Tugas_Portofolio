@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelola Keahlian - Portofolio</title>
+    <!-- Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/skills.css">
+</head>
+<body>
+    
+    <main class="admin-content">
+        <div class="content-body">
+            <div id="alertContainer"></div>
+
+            <div class="skills-layout">
+                <!-- Add Skill Form -->
+                <div class="card form-card">
+                    <div class="card-header">
+                        <h3>Tambah Keahlian Baru</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="skillForm">
+                            <div class="form-group">
+                                <label for="nama_skill">Nama Keahlian</label>
+                                <input type="text" id="nama_skill" placeholder="Contoh: Python, Web Design, dll." required>
+                            </div>
+                            <div class="form-group">
+                                <label for="icon_class">Pilih Icon (FontAwesome)</label>
+                                <select id="icon_class" required>
+                                    <option value="fas fa-code">🖥️ Code (fas fa-code)</option>
+                                    <option value="fab fa-js">🟨 JavaScript (fab fa-js)</option>
+                                    <option value="fab fa-python">🐍 Python (fab fa-python)</option>
+                                    <option value="fab fa-html5">🟧 HTML5 (fab fa-html5)</option>
+                                    <option value="fab fa-css3-alt">🟦 CSS3 (fab fa-css3-alt)</option>
+                                    <option value="fab fa-react">⚛️ React (fab fa-react)</option>
+                                    <option value="fas fa-database">🗄️ Database (fas fa-database)</option>
+                                    <option value="fas fa-network-wired">🌐 Network (fas fa-network-wired)</option>
+                                    <option value="fas fa-server">🖥️ Server (fas fa-server)</option>
+                                    <option value="fas fa-diagram-project">📊 Diagram/Design (fas fa-diagram-project)</option>
+                                    <option value="fas fa-file-code">📄 Specification (fas fa-file-code)</option>
+                                    <option value="fas fa-tools">🛠️ Tools (fas fa-tools)</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn" id="saveSkillBtn">
+                                <i class="fas fa-plus"></i> Simpan Keahlian
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Skills List -->
+                <div class="card list-card">
+                    <div class="card-header">
+                        <h3>Daftar Keahlian Saat Ini</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="skills-table-container">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 80px;">Icon</th>
+                                        <th>Nama Keahlian</th>
+                                        <th style="width: 100px; text-align: center;">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="skillsList">
+                                    <tr>
+                                        <td colspan="3" class="empty-state">Memuat data keahlian...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/base.js"></script>
+    <script src="js/skills.js"></script>
+</body>
+</html>

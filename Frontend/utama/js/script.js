@@ -15,11 +15,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             navMenu.classList.toggle('active');
         });
     }
+
+    // Setup Project Modal Close Events
+    setupProjectModalEvents();
 });
+
+// Variable global untuk menyimpan list proyek agar bisa diakses modal detail
+let loadedProjectsList = [];
 
 async function loadPublicData() {
     try {
-        // Menggunakan endpoint /api/main-profile
         const response = await fetch('/api/main-profile');
         if (!response.ok) throw new Error(`Server error: ${response.status}`);
         
@@ -38,16 +43,19 @@ async function loadPublicData() {
             return;
         }
 
+        // Simpan data proyek secara global
+        loadedProjectsList = projects || [];
+
         renderHero(profile);
         renderAbout(profile);
         renderSkills(skills || []);
         renderExperiences(experiences || []);
-        renderProjects(projects || []);
+        renderProjects(loadedProjectsList);
         renderContact(profile);
 
     } catch (error) {
         console.error('Fetch Error:', error);
-        showError('Gagal terhubung ke server.');
+        showError('Gagal terhubung ke server database.');
     }
 }
 
@@ -146,9 +154,9 @@ function renderProjects(projs) {
         return;
     }
 
-    // PERBAIKAN STRUKTUR HTML AGAR COCOK DENGAN CSS OVERLAY
-    container.innerHTML = projs.map(p => `
-        <div class="project-card">
+    // Render proyek dengan link deteksi index klik untuk membuka modal detail
+    container.innerHTML = projs.map((p, idx) => `
+        <div class="project-card" onclick="openProjectDetail(${idx})">
             <div class="project-img-wrapper">
                 ${p.gambar_url 
                     ? `<img src="${escapeHtml(p.gambar_url)}" alt="${escapeHtml(p.judul)}" class="project-img" loading="lazy">` 
@@ -162,11 +170,66 @@ function renderProjects(projs) {
             <div class="project-info">
                 <p>${escapeHtml(p.deskripsi?.substring(0, 120))}${p.deskripsi?.length > 120 ? '...' : ''}</p>
                 <div class="project-links">
-                    ${p.link_project ? `<a href="${escapeHtml(p.link_project)}" target="_blank"><i class="fas fa-external-link-alt"></i> Demo</a>` : ''}
+                    <button class="btn-detail-trigger" style="background:none; border:none; color:var(--primary); font-weight:600; cursor:pointer; display:inline-flex; align-items:center; gap:4px; padding:0;">
+                        <i class="fas fa-info-circle"></i> Detail Selengkapnya
+                    </button>
                 </div>
             </div>
         </div>
     `).join('');
+}
+
+// Buka modal detail proyek
+function openProjectDetail(idx) {
+    const proj = loadedProjectsList[idx];
+    if (!proj) return;
+
+    const modal = document.getElementById('projectDetailModal');
+    const modalImg = document.getElementById('modalProjectImg');
+    const modalTitle = document.getElementById('modalProjectTitle');
+    const modalDesc = document.getElementById('modalProjectDesc');
+    const modalLink = document.getElementById('modalProjectLink');
+
+    if (modal) {
+        modalTitle.textContent = proj.judul;
+        modalDesc.textContent = proj.deskripsi;
+        
+        if (proj.gambar_url) {
+            modalImg.src = proj.gambar_url;
+            modalImg.parentElement.style.display = 'block';
+        } else {
+            modalImg.parentElement.style.display = 'none';
+        }
+
+        if (proj.link_project && proj.link_project !== '#') {
+            modalLink.href = proj.link_project;
+            modalLink.style.display = 'inline-block';
+        } else {
+            modalLink.style.display = 'none';
+        }
+
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden'; // Lock scroll
+    }
+}
+
+function setupProjectModalEvents() {
+    const modal = document.getElementById('projectDetailModal');
+    const closeBtn = document.getElementById('closeProjectModal');
+
+    if (modal && closeBtn) {
+        const closeModal = () => {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto'; // Unlock scroll
+        };
+
+        closeBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+    }
 }
 
 function renderContact(p) {
@@ -177,31 +240,55 @@ function renderContact(p) {
 }
 
 function setupContactForm() {
-    // Fungsi Kirim Pesan Form ke WhatsApp
-const contactForm = document.getElementById('contactForm');
-if (contactForm) {
-    contactForm.addEventListener('submit', function(e) {
-        e.preventDefault(); // Mencegah halaman reload saat disubmit
+    const contactForm = document.getElementById('contactForm');
+    const sendBtn = document.getElementById('sendBtn');
 
-        // 1. Ambil data inputan user dari form
-        const nama = document.getElementById('contactName').value;
-        const email = document.getElementById('contactEmail').value;
-        const pesan = document.getElementById('contactMessage').value;
+    if (contactForm) {
+        contactForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
 
-        // 2. Masukkan nomor WhatsApp lu di sini (Ganti XXXXXX dengan nomor WA asli lu, awali dengan 62)
-        // Contoh: const nomorWA = "6281234567890";
-        const nomorWA = "6289515398259"; 
+            // 1. Ambil data inputan user dari form
+            const nama = document.getElementById('contactName').value.trim();
+            const email = document.getElementById('contactEmail').value.trim();
+            const pesan = document.getElementById('contactMessage').value.trim();
 
-        // 3. Rangkai template chat otomatisnya
-        const teksFormat = `Halo Farrel, saya *${nama}* (${email}).\n\n*Pesan:*\n${pesan}`;
+            if (!nama || !email || !pesan) return;
 
-        // 4. Encode text agar aman dibaca url browser
-        const urlWhatsApp = `https://wa.me/${nomorWA}?text=${encodeURIComponent(teksFormat)}`;
+            // Loading state
+            sendBtn.disabled = true;
+            const origText = sendBtn.textContent;
+            sendBtn.textContent = 'Mengirim Pesan...';
 
-        // 5. Buka tab baru mengarah langsung ke chat WhatsApp
-        window.open(urlWhatsApp, '_blank');
-    });
-}
+            // 2. Hubungkan ke Resend API Backend
+            try {
+                const response = await fetch('/api/utama/kontak', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nama, email, pesan })
+                });
+
+                if (response.ok) {
+                    alert('Pesan berhasil dikirim via Resend Email ke Farrel!');
+                    contactForm.reset();
+                } else {
+                    const errData = await response.json();
+                    throw new Error(errData.error || 'Gagal mengirim email');
+                }
+            } catch (err) {
+                console.error(err);
+                alert(`Gagal mengirim via Resend Email: ${err.message}. Mencoba mengalihkan ke WhatsApp...`);
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.textContent = origText;
+            }
+
+            // 3. Cadangan: Buka link chat WhatsApp agar fleksibel
+            const nomorWA = "6289515398259"; 
+            const teksFormat = `Halo Farrel, saya *${nama}* (${email}).\n\n*Pesan:*\n${pesan}`;
+            const urlWhatsApp = `https://wa.me/${nomorWA}?text=${encodeURIComponent(teksFormat)}`;
+            window.open(urlWhatsApp, '_blank');
+        });
+    }
 }
 
 function escapeHtml(text) {

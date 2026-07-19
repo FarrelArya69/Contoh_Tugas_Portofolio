@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelola Pengalaman - Portofolio</title>
+    <!-- Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/experience.css">
+</head>
+<body>
+    
+    <main class="admin-content">
+        <div class="content-body">
+            <div id="alertContainer"></div>
+
+            <div class="exp-layout">
+                <!-- Form Card -->
+                <div class="card form-card">
+                    <div class="card-header">
+                        <h3 id="formTitle">Tambah Pengalaman Baru</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="expForm">
+                            <input type="hidden" id="exp_id">
+
+                            <div class="form-group">
+                                <label for="posisi">Posisi / Jabatan</label>
+                                <input type="text" id="posisi" placeholder="Contoh: Teknisi Jaringan, Web Developer" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="perusahaan">Nama Perusahaan / Organisasi</label>
+                                <input type="text" id="perusahaan" placeholder="Contoh: PT. ABC, Universitas XYZ" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="durasi">Durasi / Waktu Kerja</label>
+                                <input type="text" id="durasi" placeholder="Contoh: 2024 - Sekarang, Des 2023 - Jan 2024" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="deskripsi">Deskripsi Pekerjaan</label>
+                                <textarea id="deskripsi" placeholder="Jelaskan kontribusi, tugas, atau capaian Anda selama bekerja..." required></textarea>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="button" class="btn outline" id="resetFormBtn" style="display: none;">Batal Edit</button>
+                                <button type="submit" class="btn" id="saveExpBtn">Simpan Pengalaman</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- List Card -->
+                <div class="card list-card">
+                    <div class="card-header">
+                        <h3>Daftar Pengalaman Saat Ini</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="exp-timeline" id="expList">
+                            <p class="empty-state">Memuat data pengalaman...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/base.js"></script>
+    <script src="js/experience.js"></script>
+</body>
+</html>

@@ -1,63 +1,91 @@
-document.addEventListener("DOMContentLoaded", function () {
-    // 1. CEK OTENTIKASI & PROTEKSI TOKEN
-    const token = localStorage.getItem("admin_token");
-    
-    // Jika token kosong atau tidak valid, kembalikan ke login.html
-    if (!token) {
-        window.location.href = "/Frontend/admin/login.html";
+document.addEventListener('DOMContentLoaded', async () => {
+    // 1. Tampilkan Nama Admin
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+        const user = JSON.parse(userStr);
+        const welcomeEl = document.getElementById('welcomeAdmin');
+        if (welcomeEl) {
+            welcomeEl.textContent = user.username;
+        }
+    }
+
+    // 2. Load Data Dashboard
+    await loadDashboardData();
+});
+
+async function loadDashboardData() {
+    showGlobalLoader();
+    try {
+        // Fetch stats
+        const statsRes = await api.get('/dashboard/stats');
+        if (statsRes.success) {
+            document.getElementById('skillsCount').textContent = statsRes.data.skills_count;
+            document.getElementById('projectsCount').textContent = statsRes.data.projects_count;
+            document.getElementById('experiencesCount').textContent = statsRes.data.experiences_count;
+        }
+
+        // Fetch recent activity
+        const recentRes = await api.get('/dashboard/recent');
+        if (recentRes.success) {
+            renderRecentActivity(recentRes.data);
+        }
+
+    } catch (error) {
+        console.error('Failed to load dashboard data:', error);
+        showAlert('Gagal memuat data statistik dashboard.', 'danger');
+    } finally {
+        hideGlobalLoader();
+    }
+}
+
+function renderRecentActivity(activities) {
+    const container = document.getElementById('recentActivities');
+    if (!container) return;
+
+    if (!activities || activities.length === 0) {
+        container.innerHTML = '<p class="empty-state">Belum ada aktivitas terbaru.</p>';
         return;
     }
 
-    // Set nama profil admin dari session browser jika tersedia
-    const currentAdmin = localStorage.getItem("admin_name");
-    if (currentAdmin) {
-        document.getElementById("adminName").textContent = currentAdmin;
-    }
+    container.innerHTML = activities.map(act => {
+        const formattedDate = formatDate(act.created_at);
+        const iconType = act.type === 'experience' ? 'type-experience' : 'type-project';
+        const actionText = act.type === 'experience' 
+            ? `Menambahkan pengalaman sebagai <strong>${escapeHtml(act.posisi)}</strong> di <strong>${escapeHtml(act.perusahaan)}</strong>`
+            : `Membuat proyek baru dengan judul <strong>${escapeHtml(act.judul)}</strong>`;
 
-    // Header Authorization Bearer Token untuk akses secure Blueprint endpoint
-    const secureHeaders = {
-        "Authorization": `Bearer ${token}`,
-        "Accept": "application/json"
-    };
+        return `
+            <div class="timeline-event ${iconType}">
+                <div class="event-time">${formattedDate}</div>
+                <div class="event-title">${act.type === 'experience' ? 'Pengalaman Baru' : 'Proyek Baru'}</div>
+                <div class="event-desc">${actionText}</div>
+            </div>
+        `;
+    }).join('');
+}
 
-    // 2. AMBIL STATISTIK SECARA DINAMIS DARI BACKEND
-    // Hitung total data Skill
-    fetch('/api/skills', { headers: secureHeaders })
-        .then(res => res.ok ? res.json() : [])
-        .then(data => {
-            const list = Array.isArray(data) ? data : (data.skills || []);
-            document.getElementById("countSkills").textContent = list.length;
-        })
-        .catch(() => document.getElementById("countSkills").textContent = "0");
-
-    // Hitung total data Pengalaman
-    fetch('/api/experience', { headers: secureHeaders })
-        .then(res => res.ok ? res.json() : [])
-        .then(data => {
-            const list = Array.isArray(data) ? data : (data.experiences || []);
-            document.getElementById("countExperience").textContent = list.length;
-        })
-        .catch(() => document.getElementById("countExperience").textContent = "0");
-
-    // Hitung total data Proyek
-    fetch('/api/projects', { headers: secureHeaders })
-        .then(res => res.ok ? res.json() : [])
-        .then(data => {
-            const list = Array.isArray(data) ? data : (data.projects || []);
-            document.getElementById("countProjects").textContent = list.length;
-        })
-        .catch(() => document.getElementById("countProjects").textContent = "0");
-
-    // 3. EVENT HANDLER LOGOUT KELUAR SISTEM
-    const logoutBtn = document.getElementById("logoutBtn");
-    if (logoutBtn) {
-        logoutBtn.addEventListener("click", function () {
-            // Hapus semua data otentikasi dari penyimpanan lokal browser
-            localStorage.removeItem("admin_token");
-            localStorage.removeItem("admin_name");
-            
-            // Redirect langsung ke halaman login bawaan asdos
-            window.location.href = "/Frontend/admin/login.html";
+// Helpers
+function formatDate(dateStr) {
+    if (!dateStr) return '';
+    try {
+        // Parse date string (handling python format 'Sun, 19 Jul 2026 15:33:00 GMT' or ISO string)
+        const date = new Date(dateStr);
+        if (isNaN(date.getTime())) return dateStr;
+        
+        return date.toLocaleDateString('id-ID', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
         });
+    } catch (e) {
+        return dateStr;
     }
-});
+}
+
+function escapeHtml(text) {
+    if (text === null || text === undefined) return '';
+    const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+    return String(text).replace(/[&<>"']/g, m => map[m]);
+}

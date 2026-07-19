@@ -12,6 +12,7 @@ from Backend.admin.projects import projects_bp
 from Backend.admin.skills import skills_bp
 from Backend.utama.utama import utama_bp
 from Backend.admin.upload import upload_bp
+from Backend.admin.akun import akun_bp
 
 
 def create_app():
@@ -36,6 +37,7 @@ def create_app():
     app.register_blueprint(skills_bp, url_prefix='/api')
     app.register_blueprint(utama_bp, url_prefix='/api')
     app.register_blueprint(upload_bp, url_prefix='/api')
+    app.register_blueprint(akun_bp, url_prefix='/api')
     
     # Route untuk serving frontend files
     @app.route('/')

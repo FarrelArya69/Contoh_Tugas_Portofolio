@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil & Akun - Portofolio</title>
+    <!-- Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/akun.css">
+</head>
+<body>
+    
+    <main class="admin-content">
+        <div class="content-body">
+            <div id="alertContainer"></div>
+
+            <div class="akun-layout">
+                <!-- Profile Settings Card -->
+                <div class="card profile-card">
+                    <div class="card-header">
+                        <h3>Pengaturan Profil Portofolio</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="profileForm">
+                            <div class="profile-photo-section">
+                                <div class="profile-avatar-preview">
+                                    <img src="" id="profilePhotoPreview" alt="Foto Profil" style="display: none;">
+                                    <div class="avatar-placeholder" id="avatarPlaceholder"><i class="fas fa-user"></i></div>
+                                </div>
+                                <div class="photo-controls">
+                                    <input type="file" id="profilePhotoInput" accept="image/*" style="display: none;">
+                                    <button type="button" class="btn outline small" id="uploadPhotoBtn">
+                                        <i class="fas fa-camera"></i> Unggah Foto
+                                    </button>
+                                    <input type="hidden" id="foto_url">
+                                    <p class="help-text">JPG or PNG. Maks 2MB. Diunggah ke Cloudinary.</p>
+                                </div>
+                            </div>
+
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="nama_lengkap">Nama Lengkap</label>
+                                    <input type="text" id="nama_lengkap" placeholder="Masukkan nama lengkap Anda" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="nama_panggilan">Nama Panggilan</label>
+                                    <input type="text" id="nama_panggilan" placeholder="Masukkan nama panggilan">
+                                </div>
+                                <div class="form-group">
+                                    <label for="tempat_lahir">Tempat Lahir</label>
+                                    <input type="text" id="tempat_lahir" placeholder="Kota Lahir">
+                                </div>
+                                <div class="form-group">
+                                    <label for="tanggal_lahir">Tanggal Lahir</label>
+                                    <input type="date" id="tanggal_lahir">
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" id="email" placeholder="example@email.com" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="telepon">No. Telepon / WA</label>
+                                    <input type="text" id="telepon" placeholder="Contoh: 0812345678">
+                                </div>
+                                <div class="form-group">
+                                    <label for="universitas">Universitas</label>
+                                    <input type="text" id="universitas" placeholder="Nama Universitas">
+                                </div>
+                                <div class="form-group">
+                                    <label for="fakultas">Fakultas</label>
+                                    <input type="text" id="fakultas" placeholder="Fakultas">
+                                </div>
+                                <div class="form-group">
+                                    <label for="prodi">Program Studi</label>
+                                    <input type="text" id="prodi" placeholder="Contoh: S1 Sistem Informasi">
+                                </div>
+                                <div class="form-group">
+                                    <label for="semester">Semester</label>
+                                    <input type="text" id="semester" placeholder="Contoh: 4">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="alamat">Alamat Lengkap</label>
+                                <textarea id="alamat" placeholder="Tuliskan kota atau alamat domisili saat ini..."></textarea>
+                            </div>
+
+                            <button type="submit" class="btn" id="saveProfileBtn">
+                                <i class="fas fa-save"></i> Simpan Profil
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Password and Account Settings Card -->
+                <div class="card security-card">
+                    <div class="card-header">
+                        <h3>Keamanan & Kata Sandi</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="passwordForm">
+                            <div class="form-group">
+                                <label for="old_password">Kata Sandi Lama</label>
+                                <input type="password" id="old_password" placeholder="Masukkan kata sandi lama" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="new_password">Kata Sandi Baru</label>
+                                <input type="password" id="new_password" placeholder="Minimal 6 karakter" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="confirm_password">Konfirmasi Kata Sandi Baru</label>
+                                <input type="password" id="confirm_password" placeholder="Ulangi kata sandi baru" required>
+                            </div>
+                            <button type="submit" class="btn outline danger-btn" id="changePasswordBtn">
+                                <i class="fas fa-key"></i> Ganti Kata Sandi
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/base.js"></script>
+    <script src="js/akun.js"></script>
+</body>
+</html>

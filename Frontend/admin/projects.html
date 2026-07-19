@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelola Proyek - Portofolio</title>
+    <!-- Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/projects.css">
+</head>
+<body>
+    
+    <main class="admin-content">
+        <div class="content-body">
+            <div id="alertContainer"></div>
+
+            <div class="projects-actions">
+                <button class="btn" id="openAddModalBtn" style="width: auto; padding: 12px 24px;">
+                    <i class="fas fa-plus"></i> Tambah Proyek Baru
+                </button>
+            </div>
+
+            <!-- Projects Grid Grid -->
+            <div class="projects-admin-grid" id="projectsList">
+                <p class="empty-state">Memuat data proyek...</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Form (Add/Edit Project) -->
+    <div class="modal-overlay" id="projectModal" style="display: none;">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="modalTitle">Tambah Proyek Baru</h3>
+                <button class="close-btn" id="closeModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="projectForm">
+                    <input type="hidden" id="project_id">
+                    
+                    <div class="form-group">
+                        <label for="judul">Judul Proyek</label>
+                        <input type="text" id="judul" placeholder="Masukkan judul proyek" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="deskripsi">Deskripsi Proyek</label>
+                        <textarea id="deskripsi" placeholder="Jelaskan alur, fitur, atau teknologi proyek Anda..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="link_project">Link Demo / GitHub</label>
+                        <input type="url" id="link_project" placeholder="https://github.com/username/project">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="projectImage">Gambar Proyek</label>
+                        <div class="image-upload-wrapper">
+                            <input type="file" id="projectImage" accept="image/*" style="display: none;">
+                            <button type="button" class="btn outline" id="uploadTrigger">
+                                <i class="fas fa-cloud-upload-alt"></i> Pilih Gambar
+                            </button>
+                            <span class="file-name" id="fileNameDisplay">Tidak ada berkas dipilih</span>
+                        </div>
+                        <input type="hidden" id="gambar_url">
+                        <div class="image-preview-box" id="imagePreviewContainer" style="display: none;">
+                            <img src="" id="imagePreview" alt="Preview Gambar">
+                            <button type="button" class="remove-img-btn" id="removeImgBtn">&times;</button>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn outline" id="cancelModalBtn">Batal</button>
+                        <button type="submit" class="btn" id="saveProjectBtn">Simpan Proyek</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/base.js"></script>
+    <script src="js/projects.js"></script>
+</body>
+</html>

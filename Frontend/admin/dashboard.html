@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - Portofolio</title>
+    <!-- Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    
+    <main class="admin-content">
+        <div class="content-body">
+            <div id="alertContainer"></div>
+
+            <div class="welcome-box">
+                <h2>Halo, <span id="welcomeAdmin">Admin</span>! 👋</h2>
+                <p>Selamat datang di panel kontrol portofolio Anda. Di sini Anda dapat menambahkan, mengubah, atau menghapus item portfolio.</p>
+            </div>
+
+            <!-- Stats Cards Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon icon-blue">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Keahlian</h3>
+                        <p class="count" id="skillsCount">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon icon-green">
+                        <i class="fas fa-folder-open"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Proyek</h3>
+                        <p class="count" id="projectsCount">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon icon-purple">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Pengalaman</h3>
+                        <p class="count" id="experiencesCount">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Layout Grid -->
+            <div class="dashboard-details">
+                <!-- Recent Activities -->
+                <div class="details-card">
+                    <div class="card-header">
+                        <h3>Aktivitas Terbaru</h3>
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <div class="card-body">
+                        <div class="activity-timeline" id="recentActivities">
+                            <p class="empty-state">Memuat aktivitas terbaru...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="details-card">
+                    <div class="card-header">
+                        <h3>Akses Cepat</h3>
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="card-body quick-actions-body">
+                        <a href="skills.html" class="quick-btn"><i class="fas fa-plus"></i> Tambah Keahlian</a>
+                        <a href="projects.html" class="quick-btn"><i class="fas fa-plus"></i> Tambah Proyek Baru</a>
+                        <a href="experience.html" class="quick-btn"><i class="fas fa-plus"></i> Tambah Pengalaman</a>
+                        <a href="akun.html" class="quick-btn"><i class="fas fa-user-edit"></i> Edit Profil</a>
+                        <a href="/" target="_blank" class="quick-btn outline"><i class="fas fa-external-link-alt"></i> Lihat Web Portfolio</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/base.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>
