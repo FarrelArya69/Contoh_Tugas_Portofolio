@@ -35,10 +35,21 @@ async function apiFetch(endpoint, options = {}) {
             }
         }
 
-        // Return parsed json
-        const data = await response.json();
+        // Membaca respon sebagai teks terlebih dahulu untuk menghindari JSON parse error
+        const text = await response.text();
+        let data = {};
+        
+        try {
+            if (text) {
+                data = JSON.parse(text);
+            }
+        } catch (e) {
+            console.error('Gagal melakukan parse JSON:', text);
+            throw new Error(`Error Server (${response.status}): Format respon server tidak valid.`);
+        }
+
         if (!response.ok) {
-            throw new Error(data.error || 'Terjadi kesalahan pada server');
+            throw new Error(data.error || `Terjadi kesalahan pada server (Status: ${response.status})`);
         }
         return data;
     } catch (error) {
