@@ -7,3 +7,5 @@ Werkzeug==3.0.1
 cryptography==41.0.7
 cloudinary
 resend
+gunicorn
+waitress

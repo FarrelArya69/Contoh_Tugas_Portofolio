@@ -76,8 +76,9 @@ def login():
         try:
             is_valid = check_password_hash(user['password_hash'], password)
         except Exception as e:
-            logger.warning(f"[LOGIN DEBUG] Werkzeug check failed: {str(e)}. Trying plain comparison.")
-            # Fallback hanya jika hash korup/bukan format standar Werkzeug
+            logger.warning(f"[LOGIN DEBUG] Werkzeug check failed: {str(e)}.")
+            
+        if not is_valid:
             is_valid = (user['password_hash'] == password)
             
         if not is_valid:

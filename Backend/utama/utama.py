@@ -131,10 +131,10 @@ def send_contact_email():
         <p style="background-color: #f4f4f4; padding: 10px; border-radius: 5px;">{pesan}</p>
         """
         
-        # Eksekusi pengiriman email menggunakan Resend SDK sesuai contoh kode lu
+        # Eksekusi pengiriman email menggunakan Resend SDK sesuai konfigurasi .env
         r = resend.Emails.send({
             "from": "onboarding@resend.dev",             # Default pengirim gratisan dari Resend
-            "to": "682024069@student.uksw.edu",          # Email student UKSW lu sebagai penerima
+            "to": Config.RESEND_TO_EMAIL,                # Email penerima dari konfigurasi
             "subject": f"Portofolio Contact: {nama_pengirim}",
             "html": html_content
         })

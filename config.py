@@ -32,3 +32,4 @@ class Config:
     
     # Resend API Configuration
     RESEND_API_KEY = os.getenv('RESEND_API_KEY', 're_8U2pKjT5_BeY3DK9JWtFZiSHw3QwsjqjL')
+    RESEND_TO_EMAIL = os.getenv('RESEND_TO_EMAIL', '682024069@student.uksw.edu')
